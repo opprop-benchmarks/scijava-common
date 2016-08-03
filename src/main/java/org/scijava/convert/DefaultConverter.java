@@ -46,7 +46,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.util.ArrayUtils;
 import org.scijava.util.ClassUtils;
 import org.scijava.util.ConversionUtils;
-import org.scijava.util.GenericUtils;
+import org.scijava.util.Types;
 
 /**
  * Default {@link Converter} implementation. Provides useful conversion
@@ -63,8 +63,10 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	public Object convert(final Object src, final Type dest) {
 
 		// Handle array types, including generic array types.
-		if (isArray(dest)) {
-			return convertToArray(src, GenericUtils.getComponentClass(dest));
+		final Type componentType = Types.component(dest);
+		if (componentType != null) {
+			// NB: Destination is an array type.
+			return convertToArray(src, Types.raw(componentType));
 		}
 
 		// Handle parameterized collection types.
@@ -73,7 +75,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		}
 
 		// This wasn't a collection or array, so convert it as a single element.
-		return convert(src, GenericUtils.getClass(dest));
+		return convert(src, Types.raw(dest));
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		// Handle array types
 		if (isArray(dest)) {
 			@SuppressWarnings("unchecked")
-			T array = (T) convertToArray(src, GenericUtils.getComponentClass(dest));
+			T array = (T) convertToArray(src, Types.raw(Types.component(dest)));
 			return array;
 		}
 
@@ -207,12 +209,11 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	}
 
 	private boolean isArray(final Type type) {
-		return GenericUtils.getComponentClass(type) != null;
+		return Types.component(type) != null;
 	}
 
 	private boolean isCollection(final Type type) {
-		return ConversionUtils.canCast(GenericUtils.getClass(type),
-			Collection.class);
+		return ConversionUtils.canCast(Types.raw(type), Collection.class);
 	}
 
 	private Object
@@ -238,8 +239,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	private Object convertToCollection(final Object value,
 		final ParameterizedType pType)
 	{
-		final Collection<Object> collection =
-			createCollection(GenericUtils.getClass(pType));
+		final Collection<Object> collection = createCollection(Types.raw(pType));
 		if (collection == null) return null;
 
 		// Populate the collection.
@@ -289,7 +289,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 
 		// Handle parameterized collection types.
 		if (dest instanceof ParameterizedType && isCollection(dest) &&
-			createCollection(GenericUtils.getClass(dest)) != null)
+			createCollection(Types.raw(dest)) != null)
 		{
 			return true;
 		}

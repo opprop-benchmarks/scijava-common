@@ -45,7 +45,7 @@ import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Attr;
 import org.scijava.plugin.Parameter;
 import org.scijava.util.ConversionUtils;
-import org.scijava.util.GenericUtils;
+import org.scijava.util.Types;
 
 /**
  * {@link ModuleItem} implementation describing an input or output of a command.
@@ -75,8 +75,7 @@ public class CommandModuleItem<T> extends AbstractModuleItem<T> {
 
 	@Override
 	public Class<T> getType() {
-		final Class<?> type =
-			GenericUtils.getFieldClasses(field, getDelegateClass()).get(0);
+		final Class<?> type = Types.raw(Types.type(field, getDelegateClass()));
 		@SuppressWarnings("unchecked")
 		final Class<T> typedType = (Class<T>) type;
 		return typedType;
@@ -84,7 +83,7 @@ public class CommandModuleItem<T> extends AbstractModuleItem<T> {
 
 	@Override
 	public Type getGenericType() {
-		return GenericUtils.getFieldType(field, getDelegateClass());
+		return Types.type(field, getDelegateClass());
 	}
 
 	@Override

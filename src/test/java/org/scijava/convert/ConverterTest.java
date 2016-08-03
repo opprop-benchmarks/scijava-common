@@ -42,7 +42,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.scijava.util.ClassUtils;
-import org.scijava.util.GenericUtils;
+import org.scijava.util.Types;
 
 /**
  * Tests individual {@link Converter}s.
@@ -96,7 +96,7 @@ public class ConverterTest {
 		final DefaultConverter dc = new DefaultConverter();
 
 		final Field destField = ClassUtils.getField(getClass(), "collection");
-		final Type destType = GenericUtils.getFieldType(destField, getClass());
+		final Type destType = Types.type(destField, getClass());
 		assertTrue(dc.canConvert(ArrayList.class, destType));
 	}
 
