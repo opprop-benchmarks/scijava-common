@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.Test;
-import org.scijava.util.ClassUtils;
 import org.scijava.util.Types;
 
 /**
@@ -95,7 +94,7 @@ public class ConverterTest {
 	public void testCanConvertToGenericCollection() {
 		final DefaultConverter dc = new DefaultConverter();
 
-		final Field destField = ClassUtils.getField(getClass(), "collection");
+		final Field destField = Types.field(getClass(), "collection");
 		final Type destType = Types.type(destField, getClass());
 		assertTrue(dc.canConvert(ArrayList.class, destType));
 	}
