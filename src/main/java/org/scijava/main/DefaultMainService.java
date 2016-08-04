@@ -41,7 +41,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
-import org.scijava.util.ClassUtils;
+import org.scijava.util.Types;
 
 /**
  * Default implementation of {@link MainService}.
@@ -101,7 +101,7 @@ public class DefaultMainService extends AbstractService implements MainService {
 		@Override
 		public void exec() {
 			try {
-				final Class<?> mainClass = ClassUtils.loadClass(className, false);
+				final Class<?> mainClass = Types.load(className, false);
 				final Method main = mainClass.getMethod("main", String[].class);
 				main.invoke(null, new Object[] { args });
 			}
