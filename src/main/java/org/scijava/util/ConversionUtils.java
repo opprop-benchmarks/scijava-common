@@ -86,63 +86,6 @@ public class ConversionUtils {
 		}
 	}
 
-	/**
-	 * Casts the given object to the specified type, or null if the types are
-	 * incompatible.
-	 */
-	public static <T> T cast(final Object src, final Class<T> dest) {
-		if (!canCast(src, dest)) return null;
-		@SuppressWarnings("unchecked")
-		final T result = (T) src;
-		return result;
-	}
-
-	/**
-	 * Checks whether objects of the given class can be assigned to the specified
-	 * type. Unlike {@link Class#isAssignableFrom(Class)}, this method considers
-	 * auto-unboxing.
-	 * 
-	 * @return true If the destination class is assignable from the source one, or
-	 *         if the source class is null and destination class is non-null.
-	 */
-	public static boolean canAssign(final Class<?> src, final Class<?> dest) {
-		return canCast(src, dest);
-	}
-
-	/**
-	 * Checks whether the given object can be assigned to the specified type.
-	 * Unlike {@link Class#isAssignableFrom(Class)}, this method considers
-	 * auto-unboxing.
-	 * 
-	 * @return true If the destination class is assignable from the source
-	 *         object's class, or if the source object is null and destionation
-	 *         class is non-null.
-	 */
-	public static boolean canAssign(final Object src, final Class<?> dest) {
-		return canCast(src, dest);
-	}
-
-	/**
-	 * @deprecated use {@link #canAssign(Class, Class)} instead
-	 */
-	@Deprecated
-	public static boolean canCast(final Class<?> src, final Class<?> dest) {
-		if (dest == null) return false;
-		if (src == null) return true;
-		final Class<?> saneSrc = getNonprimitiveType(src);
-		final Class<?> saneDest = getNonprimitiveType(dest);
-		return saneDest.isAssignableFrom(saneSrc);
-	}
-
-	/**
-	 * @deprecated use {@link #canAssign(Object, Class)} instead
-	 */
-	@Deprecated
-	public static boolean canCast(final Object src, final Class<?> dest) {
-		if (dest == null) return false;
-		return src == null || canCast(src.getClass(), dest);
-	}
-
 	// -- ConvertService setter --
 
 	/**
@@ -225,6 +168,36 @@ public class ConversionUtils {
 	@Deprecated
 	public static Class<?> getClass(final Type type) {
 		return Types.raw(type);
+	}
+
+	/** @deprecated use {@link Types#cast} */
+	@Deprecated
+	public static <T> T cast(final Object src, final Class<T> dest) {
+		return Types.cast(src, dest);
+	}
+
+	/** @deprecated use {@link Types#isAssignable} */
+	@Deprecated
+	public static boolean canAssign(final Class<?> src, final Class<?> dest) {
+		return Types.isAssignable(src, dest);
+	}
+
+	/** @deprecated use {@link Types#isInstance} */
+	@Deprecated
+	public static boolean canAssign(final Object src, final Class<?> dest) {
+		return Types.isInstance(src, dest);
+	}
+
+	/** @deprecated use {@link Types#isAssignable} */
+	@Deprecated
+	public static boolean canCast(final Class<?> src, final Class<?> dest) {
+		return Types.isAssignable(src, dest);
+	}
+
+	/** @deprecated use {@link Types#isInstance} */
+	@Deprecated
+	public static boolean canCast(final Object src, final Class<?> dest) {
+		return Types.isInstance(src, dest);
 	}
 
 	/** @deprecated use {@link Types#raws} and {@link Types#component} */
