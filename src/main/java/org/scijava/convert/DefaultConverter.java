@@ -81,10 +81,10 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	@Override
 	public <T> T convert(final Object src, final Class<T> dest) {
 		if (dest == null) return null;
-		if (src == null) return ConversionUtils.getNullValue(dest);
+		if (src == null) return Types.nullValue(dest);
 
 		// ensure type is well-behaved, rather than a primitive type
-		final Class<T> saneDest = ConversionUtils.getNonprimitiveType(dest);
+		final Class<T> saneDest = Types.box(dest);
 
 		// cast the existing object, if possible
 		if (ConversionUtils.canCast(src, saneDest)) return ConversionUtils.cast(
@@ -144,7 +144,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 			final String s = (String) src;
 			if (s.isEmpty()) {
 				// return null for empty strings
-				return ConversionUtils.getNullValue(dest);
+				return Types.nullValue(dest);
 			}
 
 			// use first character when converting to Character
@@ -304,14 +304,13 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		if (src == null || dest == null) return true;
 
 		// ensure type is well-behaved, rather than a primitive type
-		final Class<?> saneDest = ConversionUtils.getNonprimitiveType(dest);
+		final Class<?> saneDest = Types.box(dest);
 		
 		// OK if the existing object can be casted
 		if (ConversionUtils.canCast(src, saneDest)) return true;
 		
 		// OK for numerical conversions
-		if (ConversionUtils.canCast(ConversionUtils.getNonprimitiveType(src),
-			Number.class) &&
+		if (ConversionUtils.canCast(Types.box(src), Number.class) &&
 			(ClassUtils.isByte(dest) || ClassUtils.isDouble(dest) ||
 					ClassUtils.isFloat(dest) || ClassUtils.isInteger(dest) ||
 					ClassUtils.isLong(dest) || ClassUtils.isShort(dest)))

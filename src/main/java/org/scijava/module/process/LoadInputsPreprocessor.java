@@ -37,7 +37,7 @@ import org.scijava.module.ModuleItem;
 import org.scijava.module.ModuleService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.util.ConversionUtils;
+import org.scijava.util.Types;
 import org.scijava.widget.InputHarvester;
 
 /**
@@ -92,7 +92,7 @@ public class LoadInputsPreprocessor extends AbstractPreprocessorPlugin {
 		if (defaultValue != null) {
 			return conversionService.convert(defaultValue, type);
 		}
-		return ConversionUtils.getNullValue(type);
+		return Types.nullValue(type);
 	}
 
 }
