@@ -86,8 +86,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		final Class<T> saneDest = Types.box(dest);
 
 		// cast the existing object, if possible
-		if (ConversionUtils.canCast(src, saneDest)) return ConversionUtils.cast(
-			src, saneDest);
+		if (Types.isInstance(src, saneDest)) return Types.cast(src, saneDest);
 
 		// Handle array types
 		if (isArray(dest)) {
@@ -200,7 +199,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	{
 		for (final Constructor<?> ctor : type.getConstructors()) {
 			final Class<?>[] params = ctor.getParameterTypes();
-			if (params.length == 1 && ConversionUtils.canCast(argType, params[0])) {
+			if (params.length == 1 && Types.isAssignable(argType, params[0])) {
 				return ctor;
 			}
 		}
@@ -212,7 +211,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	}
 
 	private boolean isCollection(final Type type) {
-		return ConversionUtils.canCast(Types.raw(type), Collection.class);
+		return Types.isAssignable(Types.raw(type), Collection.class);
 	}
 
 	private Object
@@ -258,8 +257,8 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		if (type.isInterface() || Modifier.isAbstract(type.getModifiers())) {
 			// We don't have a concrete class. If it's a set or a list, we use
 			// the typical default implementation. Otherwise we won't convert.
-			if (ConversionUtils.canCast(type, List.class)) return new ArrayList<>();
-			if (ConversionUtils.canCast(type, Set.class)) return new HashSet<>();
+			if (Types.isAssignable(type, List.class)) return new ArrayList<>();
+			if (Types.isAssignable(type, Set.class)) return new HashSet<>();
 			return null;
 		}
 
@@ -299,17 +298,16 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 	@Override
 	@Deprecated
 	public boolean canConvert(final Class<?> src, final Class<?> dest) {
-
 		if (src == null || dest == null) return true;
 
 		// ensure type is well-behaved, rather than a primitive type
 		final Class<?> saneDest = Types.box(dest);
 		
 		// OK if the existing object can be casted
-		if (ConversionUtils.canCast(src, saneDest)) return true;
+		if (Types.isAssignable(src, saneDest)) return true;
 		
 		// OK for numerical conversions
-		if (ConversionUtils.canCast(Types.box(src), Number.class) && //
+		if (Types.isAssignable(Types.box(src), Number.class) && //
 			(Types.isByte(dest) || Types.isDouble(dest) || Types.isFloat(dest) ||
 				Types.isInteger(dest) || Types.isLong(dest) || Types.isShort(dest)))
 		{
@@ -319,7 +317,7 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		// OK if string
 		if (saneDest == String.class) return true;
 		
-		if (ConversionUtils.canCast(src, String.class)) {
+		if (Types.isAssignable(src, String.class)) {
 			// OK if source type is string and destination type is character
 			// (in this case, the first character of the string would be used)
 			if (saneDest == Character.class) return true;

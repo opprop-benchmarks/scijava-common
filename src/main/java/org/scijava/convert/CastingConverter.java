@@ -32,8 +32,6 @@ package org.scijava.convert;
 
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
-import org.scijava.util.ClassUtils;
-import org.scijava.util.ConversionUtils;
 import org.scijava.util.Types;
 
 /**
@@ -44,19 +42,15 @@ import org.scijava.util.Types;
 @Plugin(type = Converter.class, priority = Priority.FIRST_PRIORITY)
 public class CastingConverter extends AbstractConverter<Object, Object> {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean canConvert(final Object src, final Class<?> dest) {
-		return ClassUtils.canCast(src, dest);
+		return Types.isInstance(src, dest);
 	}
 
 	@Override
 	public boolean canConvert(final Class<?> src, final Class<?> dest) {
 		// OK if the existing object can be casted
-		if (ConversionUtils.canCast(src, dest))
-			return true;
-
-		return false;
+		return dest != null && Types.isAssignable(src, dest);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -72,7 +66,7 @@ public class CastingConverter extends AbstractConverter<Object, Object> {
 		// very quickly in various subclassing cases, generic parameters
 		// resolved vs. propagated, etc.
 		final Class<?> c = Types.raw(dest);
-		return (T) ConversionUtils.cast(src, c);
+		return (T) Types.cast(src, c);
 	}
 
 	@Override
