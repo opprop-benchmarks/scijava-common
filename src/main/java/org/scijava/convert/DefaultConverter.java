@@ -44,7 +44,6 @@ import java.util.Set;
 
 import org.scijava.plugin.Plugin;
 import org.scijava.util.ArrayUtils;
-import org.scijava.util.ClassUtils;
 import org.scijava.util.ConversionUtils;
 import org.scijava.util.Types;
 
@@ -310,10 +309,9 @@ public class DefaultConverter extends AbstractConverter<Object, Object> {
 		if (ConversionUtils.canCast(src, saneDest)) return true;
 		
 		// OK for numerical conversions
-		if (ConversionUtils.canCast(Types.box(src), Number.class) &&
-			(ClassUtils.isByte(dest) || ClassUtils.isDouble(dest) ||
-					ClassUtils.isFloat(dest) || ClassUtils.isInteger(dest) ||
-					ClassUtils.isLong(dest) || ClassUtils.isShort(dest)))
+		if (ConversionUtils.canCast(Types.box(src), Number.class) && //
+			(Types.isByte(dest) || Types.isDouble(dest) || Types.isFloat(dest) ||
+				Types.isInteger(dest) || Types.isLong(dest) || Types.isShort(dest)))
 		{
 			return true;
 		}
