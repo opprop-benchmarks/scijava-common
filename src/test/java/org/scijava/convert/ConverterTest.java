@@ -95,7 +95,7 @@ public class ConverterTest {
 		final DefaultConverter dc = new DefaultConverter();
 
 		final Field destField = Types.field(getClass(), "collection");
-		final Type destType = Types.type(destField, getClass());
+		final Type destType = Types.fieldType(destField, getClass());
 		assertTrue(dc.canConvert(ArrayList.class, destType));
 	}
 

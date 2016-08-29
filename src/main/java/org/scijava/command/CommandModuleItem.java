@@ -75,7 +75,7 @@ public class CommandModuleItem<T> extends AbstractModuleItem<T> {
 
 	@Override
 	public Class<T> getType() {
-		final Class<?> type = Types.raw(Types.type(field, getDelegateClass()));
+		final Class<?> type = Types.raw(Types.fieldType(field, getDelegateClass()));
 		@SuppressWarnings("unchecked")
 		final Class<T> typedType = (Class<T>) type;
 		return typedType;
@@ -83,7 +83,7 @@ public class CommandModuleItem<T> extends AbstractModuleItem<T> {
 
 	@Override
 	public Type getGenericType() {
-		return Types.type(field, getDelegateClass());
+		return Types.fieldType(field, getDelegateClass());
 	}
 
 	@Override
