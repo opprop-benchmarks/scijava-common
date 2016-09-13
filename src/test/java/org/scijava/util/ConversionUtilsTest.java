@@ -37,6 +37,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +66,7 @@ public class ConversionUtilsTest {
 		}
 		final Struct struct = new Struct();
 
-		final List<Integer> intVals = getValueList(4, 3, 7);
+		final List<Integer> intVals = Arrays.asList(4, 3, 7);
 		setFieldValue(struct, "intArray", intVals);
 
 		for (int i = 0; i < struct.intArray.length; i++) {
@@ -92,7 +93,7 @@ public class ConversionUtilsTest {
 		final Struct struct = new Struct();
 
 		// Verify behavior setting an array of Objects (Doubles)
-		final List<Double> doubleVals = getValueList(1.0, 2.0, 3.0);
+		final List<Double> doubleVals = Arrays.asList(1.0, 2.0, 3.0);
 		setFieldValue(struct, "doubleArray", doubleVals);
 
 		for (int i = 0; i < struct.doubleArray.length; i++) {
@@ -112,7 +113,7 @@ public class ConversionUtilsTest {
 		final Struct struct = new Struct();
 
 		// Verify behavior setting a List of Objects (Strings)
-		final List<String> stringVals = getValueList("ok", "still ok");
+		final List<String> stringVals = Arrays.asList("ok", "still ok");
 		setFieldValue(struct, "stringList", stringVals);
 
 		for (int i = 0; i < struct.stringList.size(); i++) {
@@ -318,7 +319,7 @@ public class ConversionUtilsTest {
 		}
 		final Struct struct = new Struct();
 
-		setFieldValue(struct, "listWrapper", getValueList(4, 8, 2));
+		setFieldValue(struct, "listWrapper", Arrays.asList(4, 8, 2));
 		assertNotNull(struct.listWrapper);
 	}
 
@@ -332,16 +333,6 @@ public class ConversionUtilsTest {
 		final Object value)
 	{
 		ClassUtils.setValue(Types.field(o.getClass(), fieldName), o, value);
-	}
-
-	/**
-	 * Convenience method to convert an array of values to a collection.
-	 */
-	private <T> List<T> getValueList(final T... values) {
-		final List<T> list = new ArrayList<>();
-		for (final T value : values)
-			list.add(value);
-		return list;
 	}
 
 	// -- Helper Classes --
