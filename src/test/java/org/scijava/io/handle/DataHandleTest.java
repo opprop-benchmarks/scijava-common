@@ -58,6 +58,13 @@ public abstract class DataHandleTest {
 			9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, -128, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, //
 			125, 127, -127, -125, -3, -2, -1 };
 
+	/**
+	 * If the handle's length is checked during {@link #checkReads(DataHandle)},
+	 * can be changed by subclasses (e.g. when processing compressed handles with
+	 * unknown length);
+	 */
+	protected boolean checkLength = true;
+
 	// -- Test methods --
 
 	@Test
@@ -72,9 +79,14 @@ public abstract class DataHandleTest {
 		{
 			assertEquals(getExpectedHandleType(), handle.getClass());
 
+			setup();
 			checkReads(handle);
 			checkWrites(handle);
 		}
+	}
+
+	protected void setup() {
+		// Subclasses can perform optional setup tasks here
 	}
 
 	// -- DataHandleTest methods --
@@ -94,7 +106,7 @@ public abstract class DataHandleTest {
 		throws IOException
 	{
 		assertEquals(0, handle.offset());
-		assertEquals(BYTES.length, handle.length());
+		if (checkLength) assertEquals(BYTES.length, handle.length());
 		assertEquals("UTF-8", handle.getEncoding());
 		assertEquals(ByteOrder.BIG_ENDIAN, handle.getOrder());
 		assertEquals(false, handle.isLittleEndian());
