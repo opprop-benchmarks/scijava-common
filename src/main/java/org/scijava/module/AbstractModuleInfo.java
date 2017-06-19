@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.scijava.AbstractUIDetails;
+import org.scijava.util.ConversionUtils;
 import org.scijava.util.Types;
 
 /**
@@ -168,7 +169,7 @@ public abstract class AbstractModuleInfo extends AbstractUIDetails implements
 		final Class<?> itemType = item.getType();
 		// if (!type.isAssignableFrom(itemType)) {
 		final Class<?> saneItemType = Types.box(itemType);
-		if (!Types.isAssignable(type, saneItemType)) {
+		if (!ConversionUtils.canCast(type, saneItemType)) {
 			throw new IllegalArgumentException("Type " + type.getName() +
 				" is incompatible with item of type " + itemType.getName());
 		}
