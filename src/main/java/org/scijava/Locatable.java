@@ -33,7 +33,7 @@ package org.scijava;
 
 import java.net.URL;
 
-import org.scijava.util.ClassUtils;
+import org.scijava.util.Types;
 
 /**
  * An object whose location is defined by a URL string.
@@ -44,7 +44,7 @@ public interface Locatable {
 
 	/** Gets the URL string defining the object's location. */
 	default String getLocation() {
-		final URL location = ClassUtils.getLocation(getClass());
+		final URL location = Types.location(getClass());
 		return location == null ? null : location.toExternalForm();
 	}
 
