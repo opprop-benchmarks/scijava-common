@@ -90,6 +90,19 @@ public interface DisplayViewer<T> extends RichPlugin, Disposable {
 	/** Gets the display panel that hosts the gui elements. */
 	DisplayPanel getPanel();
 
+	/**
+	 * Creates a {@link DisplayWindow} to house the given {@link Display}. Viewers
+	 * wishing to customize the actual UI window used may override this method;
+	 * otherwise, the framework will fall back the default {@link DisplayWindow}
+	 * for the relevant UI.
+	 * 
+	 * @param d The display for which a window is desired.
+	 * @return The newly created window.
+	 */
+	default DisplayWindow createWindow(final Display<?> d) {
+		return null;
+	}
+
 	/** Synchronizes the user interface appearance with the display model. */
 	default void onDisplayUpdatedEvent(final DisplayUpdatedEvent e) {
 		if (e.getLevel() == DisplayUpdateLevel.REBUILD) {

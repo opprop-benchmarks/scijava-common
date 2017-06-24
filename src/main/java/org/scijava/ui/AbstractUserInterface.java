@@ -137,7 +137,9 @@ public abstract class AbstractUserInterface extends AbstractRichPlugin
 		threadService.queue(new Runnable() {
 			@Override
 			public void run() {
-				final DisplayWindow displayWindow = createDisplayWindow(display);
+				final DisplayWindow preferredWindow = finalViewer.createWindow(display);
+				final DisplayWindow displayWindow = preferredWindow != null
+					? preferredWindow : createDisplayWindow(display);
 				finalViewer.view(displayWindow, display);
 				displayWindow.setTitle(display.getName());
 				uiService.addDisplayViewer(finalViewer);
