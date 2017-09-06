@@ -63,4 +63,28 @@ public interface DataHandleService extends
 	default Class<Location> getType() {
 		return Location.class;
 	}
+
+	/**
+	 * Wraps the provided {@link DataHandle} in a read-only buffer for accelerated
+	 * reading.
+	 *
+	 * @param handle
+	 *            the handle to wrap
+	 * @see ReadBufferDataHandle#ReadBufferDataHandle(DataHandle)
+	 */
+	default DataHandle<Location> createReadBuffer(final DataHandle<Location> handle) {
+		return new ReadBufferDataHandle(handle);
+	}
+
+	/**
+	 * Wraps the provided {@link DataHandle} in a write-only buffer for accelerated
+	 * writing.
+	 *
+	 * @param handle
+	 *            the handle to wrap
+	 * @see WriteBufferDataHandle#WriteBufferDataHandle(DataHandle)
+	 */
+	default DataHandle<Location> writeBuffer(final DataHandle<Location> handle) {
+		return new WriteBufferDataHandle(handle);
+	}
 }
